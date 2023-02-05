@@ -5,7 +5,7 @@ import generated.formats.nif as NifFormat
 # END_GLOBALS
 
 
-class Vector3:
+class HalfVector3:
 # START_CLASS
 
 	def __init__(self, context=None, arg=0, template=None, set_default=True):
@@ -66,7 +66,7 @@ class Vector3:
 		return vec
 
 	def get_copy(self):
-		v = Vector3()
+		v = HalfVector3()
 		v.x = self.x
 		v.y = self.y
 		v.z = self.z
@@ -77,15 +77,15 @@ class Vector3:
 
 	def __mul__(self, x):
 		if isinstance(x, (float, int)):
-			v = Vector3()
+			v = HalfVector3()
 			v.x = self.x * x
 			v.y = self.y * x
 			v.z = self.z * x
 			return v
-		elif isinstance(x, (Vector3, NifFormat.classes.HalfVector3)):
+		elif isinstance(x, (HalfVector3, NifFormat.classes.Vector3)):
 			return self.x * x.x + self.y * x.y + self.z * x.z
 		elif isinstance(x, NifFormat.classes.Matrix33):
-			v = Vector3()
+			v = HalfVector3()
 			v.x = self.x * x.m_11 + self.y * x.m_21 + self.z * x.m_31
 			v.y = self.x * x.m_12 + self.y * x.m_22 + self.z * x.m_32
 			v.z = self.x * x.m_13 + self.y * x.m_23 + self.z * x.m_33
@@ -93,85 +93,85 @@ class Vector3:
 		elif isinstance(x, NifFormat.classes.Matrix44):
 			return self * x.get_matrix_33() + x.get_translation()
 		else:
-			raise TypeError("do not know how to multiply Vector3 with %s"%x.__class__)
+			raise TypeError("do not know how to multiply HalfVector3 with %s"%x.__class__)
 
 	def __rmul__(self, x):
 		if isinstance(x, (float, int)):
-			v = Vector3()
+			v = HalfVector3()
 			v.x = x * self.x
 			v.y = x * self.y
 			v.z = x * self.z
 			return v
 		else:
-			raise TypeError("do not know how to multiply %s and Vector3"%x.__class__)
+			raise TypeError("do not know how to multiply %s and HalfVector3"%x.__class__)
 
 	def __div__(self, x):
 		if isinstance(x, (float, int)):
-			v = Vector3()
+			v = HalfVector3()
 			v.x = self.x / x
 			v.y = self.y / x
 			v.z = self.z / x
 			return v
 		else:
-			raise TypeError("do not know how to divide Vector3 and %s"%x.__class__)
+			raise TypeError("do not know how to divide HalfVector3 and %s"%x.__class__)
 
 	# py3k
 	__truediv__ = __div__
 
 	def __add__(self, x):
 		if isinstance(x, (float, int)):
-			v = Vector3()
+			v = HalfVector3()
 			v.x = self.x + x
 			v.y = self.y + x
 			v.z = self.z + x
 			return v
-		elif isinstance(x, (Vector3, NifFormat.classes.HalfVector3)):
-			v = Vector3()
+		elif isinstance(x, (HalfVector3, NifFormat.classes.Vector3)):
+			v = HalfVector3()
 			v.x = self.x + x.x
 			v.y = self.y + x.y
 			v.z = self.z + x.z
 			return v
 		else:
-			raise TypeError("do not know how to add Vector3 and %s"%x.__class__)
+			raise TypeError("do not know how to add HalfVector3 and %s"%x.__class__)
 
 	def __radd__(self, x):
 		if isinstance(x, (float, int)):
-			v = Vector3()
+			v = HalfVector3()
 			v.x = x + self.x
 			v.y = x + self.y
 			v.z = x + self.z
 			return v
 		else:
-			raise TypeError("do not know how to add %s and Vector3"%x.__class__)
+			raise TypeError("do not know how to add %s and HalfVector3"%x.__class__)
 
 	def __sub__(self, x):
 		if isinstance(x, (float, int)):
-			v = Vector3()
+			v = HalfVector3()
 			v.x = self.x - x
 			v.y = self.y - x
 			v.z = self.z - x
 			return v
-		elif isinstance(x, (Vector3, NifFormat.classes.HalfVector3)):
-			v = Vector3()
+		elif isinstance(x, (HalfVector3, NifFormat.classes.Vector3)):
+			v = HalfVector3()
 			v.x = self.x - x.x
 			v.y = self.y - x.y
 			v.z = self.z - x.z
 			return v
 		else:
-			raise TypeError("do not know how to substract Vector3 and %s"%x.__class__)
+			raise TypeError("do not know how to substract HalfVector3 and %s"%x.__class__)
 
 	def __rsub__(self, x):
 		if isinstance(x, (float, int)):
-			v = Vector3()
+			v = HalfVector3()
 			v.x = x - self.x
 			v.y = x - self.y
 			v.z = x - self.z
 			return v
 		else:
-			raise TypeError("do not know how to substract %s and Vector3"%x.__class__)
+			raise TypeError("do not know how to substract %s and HalfVector3"%x.__class__)
 
 	def __neg__(self):
-		v = Vector3()
+		v = HalfVector3()
 		v.x = -self.x
 		v.y = -self.y
 		v.z = -self.z
@@ -179,20 +179,20 @@ class Vector3:
 
 	# cross product
 	def crossproduct(self, x):
-		if isinstance(x, Vector3):
-			v = Vector3()
+		if isinstance(x, (HalfVector3, NifFormat.classes.Vector3)):
+			v = HalfVector3()
 			v.x = self.y*x.z - self.z*x.y
 			v.y = self.z*x.x - self.x*x.z
 			v.z = self.x*x.y - self.y*x.x
 			return v
 		else:
-			raise TypeError("do not know how to calculate crossproduct of Vector3 and %s"%x.__class__)
+			raise TypeError("do not know how to calculate crossproduct of HalfVector3 and %s"%x.__class__)
 
 	def __eq__(self, x):
 		if isinstance(x, type(None)):
 			return False
-		if not isinstance(x, (Vector3, NifFormat.classes.HalfVector3)):
-			raise TypeError("do not know how to compare Vector3 and %s" % x.__class__)
+		if not isinstance(x, (HalfVector3, NifFormat.classes.Vector3)):
+			raise TypeError("do not know how to compare HalfVector3 and %s" % x.__class__)
 		if abs(self.x - x.x) > NifFormat.EPSILON: return False
 		if abs(self.y - x.y) > NifFormat.EPSILON: return False
 		if abs(self.z - x.z) > NifFormat.EPSILON: return False
